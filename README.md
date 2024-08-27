@@ -1,66 +1,68 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+TCMB Döviz Kurları Laravel Projesi
+Bu proje, Türkiye Cumhuriyet Merkez Bankası'ndan (TCMB) güncel döviz kurlarını çekip, bu verileri veritabanına kaydetmek için geliştirilmiş bir Laravel uygulamasıdır.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Özellikler
+Güncel Döviz Kurları Çekme: TCMB'nin sağladığı XML servisinden döviz kurlarını çekme.
+Veritabanına Kaydetme: Çekilen döviz kurlarını veritabanına kaydetme.
+Planlanmış Görev: Döviz kurlarını düzenli olarak güncellemek için Laravel Scheduler kullanımı.
+Kurulum
+Projenin çalışması için aşağıdaki adımları izleyin:
 
-## About Laravel
+1. Depoyu Klonlayın
+bash
+Kodu kopyala
+git clone https://github.com/kullanici_adiniz/proje_adi.git
+cd proje_adi
+2. Gerekli Bağımlılıkları Yükleyin
+bash
+Kodu kopyala
+composer install
+3. Çevresel Değişkenleri Ayarlayın
+.env dosyanızı oluşturun ve veritabanı ayarlarını yapın:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+bash
+Kodu kopyala
+cp .env.example .env
+php artisan key:generate
+.env dosyasında aşağıdaki ayarları yapın:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+plaintext
+Kodu kopyala
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=veritabani_adi
+DB_USERNAME=kullanici_adi
+DB_PASSWORD=sifre
+4. Veritabanı Migrasyonlarını Çalıştırın
+bash
+Kodu kopyala
+php artisan migrate
+5. Projeyi Çalıştırın
+bash
+Kodu kopyala
+php artisan serve
+6. TCMB Döviz Kurlarını Çekme
+Döviz kurlarını çekmek için aşağıdaki komutu çalıştırın:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+bash
+Kodu kopyala
+php artisan tcmb:fetch-rates
+7. Planlanmış Görev Ayarı (Opsiyonel)
+Döviz kurlarını düzenli olarak çekmek için App\Console\Kernel.php dosyasına gerekli cron işini ekleyin. Örneğin, günlük olarak kur çekmek için:
 
-## Learning Laravel
+php
+Kodu kopyala
+$schedule->command('tcmb:fetch-rates')->daily();
+Daha sonra sunucunuzda crontab ayarını yapmayı unutmayın:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+bash
+Kodu kopyala
+* * * * * php /path/to/your/project/artisan schedule:run >> /dev/null 2>&1
+Kullanım
+Döviz kurlarını çekmek ve veritabanına kaydetmek için:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+bash
+Kodu kopyala
+php artisan tcmb:fetch-rates
+Bu komut, TCMB'nin sağladığı XML servisinden döviz kurlarını çekip veritabanınıza kaydeder.
